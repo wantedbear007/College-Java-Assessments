@@ -1,4 +1,3 @@
-// package OMS;
 import java.util.*;
 
 public class OrderManagementSystem {
@@ -6,10 +5,49 @@ public class OrderManagementSystem {
     String product;
     int quantity;
     float price;
-    
+
     // boolean postStatus = false;
     // product status is PENDING by default
 
+
+    public static void main(String[] args) {
+
+        OrderManagementSystem orderManagementSystem = new OrderManagementSystem();
+        OrderManagement operations = orderManagementSystem.registerProduct();
+
+        int userInput;
+        System.out.println("Check from the following");
+        System.out.println("\n1. To update Order status. \n2. To get all orders list.\n 3. To get rejected orders.\n 4. To get order by category.\n 5. To get specific order details.");
+        try (Scanner sc = new Scanner(System.in)) {
+            userInput = sc.nextInt();
+        }
+        switch (userInput) {
+            case 1:
+                {
+                    orderManagementSystem.updateOrder(operations);
+                }
+            case 2:
+                {
+                    orderManagementSystem.allOrders(operations);
+                }
+            case 3:
+                {
+                    orderManagementSystem.getRejectedOrder(operations);
+                }
+            case 4:
+                {
+                    orderManagementSystem.getOrderByCategory(operations);
+                }
+            case 5:
+                {
+                    orderManagementSystem.getSpecificDetail(operations);
+                }
+            default:
+                {
+                    System.out.println("Wrong Input bye.");
+                }
+        }
+    }
     // register product
     public OrderManagement registerProduct() {
         int loop = 1;
@@ -18,9 +56,9 @@ public class OrderManagementSystem {
         while (loop != 0) {
 
             try (Scanner sc = new Scanner(System.in)) {
-                System.out.println("Register new product: ");   
+                System.out.println("Register new product: ");
                 System.out.println("Product name: ");
-                product = sc.nextLine();    
+                product = sc.nextLine();
                 System.out.println("Enter product quantity: ");
                 quantity = sc.nextInt();
                 System.out.println("Price of the product: ");
@@ -32,17 +70,18 @@ public class OrderManagementSystem {
                 loop = sc.nextInt();
                 if (loop == 0) {
                     break;
-                } 
+                }
+            } catch (Exception e) {
+
+                System.out.println("Error occurred" + e.getMessage());
+                System.exit(-1);
             }
-
-     catch (Exception e) { 
-
-        System.out.println("Error occurred" + e.getMessage());
-        System.exit(-1);
-     }
-    };
-    return postOrder;
+        };
+        return postOrder;
     }
+
+
+
 
     // to update order
     void updateOrder(OrderManagement operations) {
@@ -68,49 +107,18 @@ public class OrderManagementSystem {
     void getSpecificDetail(OrderManagement operations) {
 
     }
-
-    public static void main(String[] args) {
-
-        OrderManagementSystem orderManagementSystem = new OrderManagementSystem();
-        OrderManagement operations = orderManagementSystem.registerProduct();
-        
-        int userInput;
-        System.out.println("Check from the following");
-        System.out.println("\n1. To update Order status. \n2. To get all orders list.\n 3. To get rejected orders.\n 4. To get order by category.\n 5. To get specific order details.");
-        Scanner sc = new Scanner(System.in);
-        userInput = sc.nextInt();
-        switch (userInput) {
-            case 1: {
-                orderManagementSystem.updateOrder(operations);
-            }
-            case 2: {
-                orderManagementSystem.allOrders(operations);
-            }
-            case 3: {
-                orderManagementSystem.getRejectedOrder(operations);
-            }
-            case 4: {
-                orderManagementSystem.getOrderByCategory(operations);
-            }
-            case 5: {
-                orderManagementSystem.getSpecificDetail(operations);
-            }
-            default: {
-                System.out.println("Wrong Input bye.");
-            }
-        }
-    }
 }
 
 
+
 // Order management
-class OrderManagement  {
+class OrderManagement {
 
     // custom list
-    List<Order> orders;
+    List < Order > orders;
 
-    public OrderManagement () {
-        this.orders = new ArrayList<>();
+    public OrderManagement() {
+        this.orders = new ArrayList < > ();
     }
 
     // order item
@@ -118,7 +126,7 @@ class OrderManagement  {
         try {
             this.orders.add(order);
             return true;
-        } catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -129,8 +137,7 @@ class OrderManagement  {
 
         if (orderPosition != -1) {
             return order.status;
-        }
-        else return null;
+        } else return null;
     }
 
     // updating order status
@@ -149,21 +156,21 @@ class OrderManagement  {
     }
 
     // get all orders
-    public List<Order> getAllOrders() {
+    public List < Order > getAllOrders() {
         return orders;
     }
-    
+
     // get rejected orders
-    public List<Order> getRejectedOrders() {
+    public List < Order > getRejectedOrders() {
         try {
-            List<Order> rejectedOrders = new ArrayList<>();
-            for (Order order : this.orders) {
+            List < Order > rejectedOrders = new ArrayList < > ();
+            for (Order order: this.orders) {
                 if (order.status == OrderStatus.REJECTED) {
                     rejectedOrders.add(order);
                 }
             }
             return rejectedOrders;
-            
+
         } catch (Exception e) {
             // do something
             return null;
@@ -176,29 +183,29 @@ class OrderManagement  {
         Order selectOrder = this.orders.get(orderIndex);
         return selectOrder.toString();
     }
-    
+
     // get order by status category
-    public List<Order> getOrderByCategory(OrderStatus orderStatus) {
-            List<Order> categoryOrder = new ArrayList<>();
-        
-            if (this.orders.size() <= -1) {
-                return null;
-            } else {
-                for (Order order : this.orders) {
-                    if (order.status == orderStatus) {
-                        categoryOrder.add(order);
-                    } else {};
-                }
+    public List < Order > getOrderByCategory(OrderStatus orderStatus) {
+        List < Order > categoryOrder = new ArrayList < > ();
+
+        if (this.orders.size() <= -1) {
+            return null;
+        } else {
+            for (Order order: this.orders) {
+                if (order.status == orderStatus) {
+                    categoryOrder.add(order);
+                } else {};
             }
-            return categoryOrder;
+        }
+        return categoryOrder;
     }
 
     // update price of an order 
     public boolean updateOrderPrice(Order order, float updatedPrice) {
-        if (this.orders.size() <= -1) { 
+        if (this.orders.size() <= -1) {
             return false;
         } else {
-            for (Order odr : this.orders) {
+            for (Order odr: this.orders) {
                 if (odr == order) {
                     odr.price = updatedPrice;
                     return true;
