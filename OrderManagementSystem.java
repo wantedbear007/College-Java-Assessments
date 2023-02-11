@@ -9,104 +9,176 @@ public class OrderManagementSystem {
     // boolean postStatus = false;
     // product status is PENDING by default
 
+    // to retrieve all orders 
+    void allOrders(OrderManagement operations) {
+        List <Order> allOrders = operations.getAllOrders();
+        if (allOrders.size() <= 0) {
+            System.out.println("No orders found.");
+        }
+        else {
+
+            System.out.println("Orders are:\n");
+            for (Order or : allOrders) {
+                System.out.println("Order: " + or);
+            }
+        }
+
+    }
+
+     // to get rejected order
+     void getRejectedOrder(OrderManagement operations) {
+        List <Order> rejOrder = operations.getRejectedOrders();
+        if (rejOrder == null) {
+            System.out.println("Something went wrong! Try again later.");
+        }
+        else if (rejOrder.size() <= 0) {
+            System.out.println("No rejected orders as of now.");
+        }
+        else {
+            System.out.println("Rejected Orders Are as follows: ");
+            for (Order order : rejOrder) {
+                System.out.println("Order: " + order);
+            }
+        }
+
+     }
+ 
+     // get order by category
+     void getOrderByCategory(OrderManagement operations) {
+        System.out.println("Enter the category: ");
+        Scanner sc = new Scanner(System.in);
+        System.out.println("1. COMPLETED\n2. PENDING\n3. REJECTED\n4. PARTIAL");
+        int userInput = sc.nextInt();
+        switch (userInput) {
+            case 1: operations.getOrderByCategory(OrderStatus.COMPLETED);
+            break;
+            case 2: operations.getOrderByCategory(OrderStatus.PENDING);
+            break;
+            case 3: operations.getOrderByCategory(OrderStatus.REJECTED);
+            break;
+            case 4: operations.getOrderByCategory(OrderStatus.PARTIAL);
+            break;
+            default: {
+                System.out.println("Invalid Input.");
+            }
+        }
+ 
+     }
+
+    //  to update order
+    void updateOrder(OrderManagement operations) {
+        List <Order> allOrders = operations.getAllOrders();
+        int counter = 0;
+        if (allOrders.size() <= 0) {
+            System.out.println("No orders to update.");
+        } else {
+            System.out.println("Select Order to Update Status: \n");
+
+            for (Order order : allOrders) {
+                System.out.println(counter+ " " + order);
+                counter++;
+            }
+
+            int userInput = sc.nextInt();
+           Order order = allOrders.get(userInput);
+           System.out.println("Select from the following status: ");
+        System.out.println("1. COMPLETED\n2. PENDING\n3. REJECTED\n4. PARTIAL");
+            int userInput2 = 9;
+
+           switch (userInput2) {
+            case 1: operations.updateOrderStatus(order, OrderStatus.COMPLETED);
+            break;
+            case 2: operations.updateOrderStatus(order, OrderStatus.PENDING);
+            break;
+            case 3: operations.updateOrderStatus(order, OrderStatus.REJECTED);
+            break;
+            case 4: operations.updateOrderStatus(order, OrderStatus.PARTIAL);
+            break;
+            default: {
+                System.out.println("Invalid Input.");
+            }
+        }
+ 
+            
+        }
+    }
+ 
+     // get specific order details
+     void getSpecificDetail(OrderManagement operations) {
+ 
+     }
+
+    void registerProduct(OrderManagement orderManagement) {
+        Scanner sc = new Scanner(System.in);
+
+                    System.out.println("Register new product: ");
+                    System.out.println("Product name: ");
+                    product = sc.nextLine();
+                    System.out.println("Enter product quantity: ");
+                    quantity = sc.nextInt();
+                    System.out.println("Price of the product: ");
+                    price = sc.nextFloat();
+                    Order storeOrder = new Order(product, quantity, price);
+                    orderManagement.addOrder(storeOrder);
+                    System.out.println("Data Entered successfully !");
+             
+    }
+
 
     public static void main(String[] args) {
 
         OrderManagementSystem orderManagementSystem = new OrderManagementSystem();
-        OrderManagement operations = orderManagementSystem.registerProduct();
+        // OrderManagement operations = orderManagementSystem.registerProduct();
+        OrderManagement orderManagement = new OrderManagement();
 
-        int userInput;
+        int userInput = 9;
+        System.out.println("\n\n\n--Welcome to Order Management System--\n");
         System.out.println("Check from the following");
-        System.out.println("\n1. To update Order status. \n2. To get all orders list.\n 3. To get rejected orders.\n 4. To get order by category.\n 5. To get specific order details.");
+
         try (Scanner sc = new Scanner(System.in)) {
-            userInput = sc.nextInt();
-        }
-        switch (userInput) {
-            case 1:
-                {
-                    orderManagementSystem.updateOrder(operations);
-                }
-            case 2:
-                {
-                    orderManagementSystem.allOrders(operations);
-                }
-            case 3:
-                {
-                    orderManagementSystem.getRejectedOrder(operations);
-                }
-            case 4:
-                {
-                    orderManagementSystem.getOrderByCategory(operations);
-                }
-            case 5:
-                {
-                    orderManagementSystem.getSpecificDetail(operations);
-                }
-            default:
-                {
-                    System.out.println("Wrong Input bye.");
-                }
-        }
-    }
-    // register product
-    public OrderManagement registerProduct() {
-        int loop = 1;
-        System.out.println("Welcome to OrderManagement System");
-        OrderManagement postOrder = new OrderManagement();
-        while (loop != 0) {
-
-            try (Scanner sc = new Scanner(System.in)) {
-                System.out.println("Register new product: ");
-                System.out.println("Product name: ");
-                product = sc.nextLine();
-                System.out.println("Enter product quantity: ");
-                quantity = sc.nextInt();
-                System.out.println("Price of the product: ");
-                price = sc.nextFloat();
-                Order storeOrder = new Order(product, quantity, price);
-                postOrder.addOrder(storeOrder);
-                System.out.println("Data Entered successfully !");
-                System.out.println("Enter 2 to enter more 0 to exit");
-                loop = sc.nextInt();
-                if (loop == 0) {
+            while(userInput != 0) {
+                System.out.println("\n 1. To update Order status. \n 2. To get all orders list.\n 3. To get rejected orders.\n 4. To get order by category.\n 5. To register a new product.\n 6. To exit");
+                userInput = sc.nextInt();
+                switch (userInput) {
+                    case 1: orderManagementSystem.updateOrder(orderManagement);
                     break;
-                }
-            } catch (Exception e) {
-
-                System.out.println("Error occurred" + e.getMessage());
-                System.exit(-1);
+                    case 2: orderManagementSystem.allOrders(orderManagement);
+                    break;
+                    case 3: orderManagementSystem.getRejectedOrder(orderManagement);
+                    break;
+                    case 4: orderManagementSystem.getOrderByCategory(orderManagement);
+                    break;
+                    // case 5: orderManagementSystem.getSpecificDetail(orderManagement);
+                    // break;
+                    case 5: orderManagementSystem.registerProduct(orderManagement);
+                    break;
+                    case 6: {
+                        System.out.println("Program is exiting !");
+                        System.exit(0);
+                    }
+                    default: System.out.println("Invalid input! Try Again");
             }
-        };
-        return postOrder;
+            }
+            
+           
+        }
+
+
     }
 
 
+    Scanner sc = new Scanner(System.in);
 
 
-    // to update order
-    void updateOrder(OrderManagement operations) {
-
-    }
 
     // provide all order list
-    void allOrders(OrderManagement operations) {
+   
 
-    }
+   
 
-    // to get rejected order
-    void getRejectedOrder(OrderManagement operations) {
-
-    }
-
-    // get order by category
-    void getOrderByCategory(OrderManagement operations) {
-
-    }
-
-    // get specific order details
-    void getSpecificDetail(OrderManagement operations) {
-
-    }
+    // void registerNewProduct(OrderManagementSystem orderManagementSystem) {
+    //     orderManagementSystem.registerProduct();
+    // }
 }
 
 
@@ -115,10 +187,10 @@ public class OrderManagementSystem {
 class OrderManagement {
 
     // custom list
-    List < Order > orders;
+    static List < Order > orders;
 
     public OrderManagement() {
-        this.orders = new ArrayList < > ();
+        orders = new ArrayList < > ();
     }
 
     // order item
@@ -154,6 +226,9 @@ class OrderManagement {
             // do something
         }
     }
+    // public boolean updateOrderStatus(OrderStatus orderstatus) {
+    //     this.orders.
+    // }
 
     // get all orders
     public List < Order > getAllOrders() {
@@ -185,19 +260,30 @@ class OrderManagement {
     }
 
     // get order by status category
-    public List < Order > getOrderByCategory(OrderStatus orderStatus) {
+    public void getOrderByCategory(OrderStatus orderStatus) {
         List < Order > categoryOrder = new ArrayList < > ();
 
         if (this.orders.size() <= -1) {
-            return null;
+            System.out.println("No orders found.");
         } else {
-            for (Order order: this.orders) {
+            for (Order order: orders) {
                 if (order.status == orderStatus) {
                     categoryOrder.add(order);
                 } else {};
             }
         }
-        return categoryOrder;
+
+        if (categoryOrder.size() <= 0) {
+            System.out.println("No orders found.");
+        } else {
+            
+            System.out.println("Orders are:\n");
+            for (Order order : categoryOrder) {
+                System.out.println(order);
+            }
+        }
+
+        // return categoryOrder;
     }
 
     // update price of an order 
